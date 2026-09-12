@@ -103,10 +103,10 @@ $("loginForm").onsubmit=e=>{
 
   if(
     $("email").value.toLowerCase()
-    ==="admin@tiburonauto.ai"
+    ==="orlando"
     &&
     $("pass").value
-    ==="Tiburon2026"
+    ==="Juelzlee1319@"
   ){
     localStorage.setItem(
       "tiburon_session",
@@ -115,7 +115,7 @@ $("loginForm").onsubmit=e=>{
     start();
   }else{
     $("loginErr").textContent=
-      "Credenciales incorrectas. Usa las de demostración.";
+      "Credenciales incorrectas. Usa tu usuario y contraseña.";
   }
 };
 
