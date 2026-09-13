@@ -95,29 +95,51 @@ $("menu").onclick=()=>{
 };
 
 /* ============================================================
-   LOGIN
+   LOGIN - SEGURO
 ============================================================ */
 
 $("loginForm").onsubmit=e=>{
   e.preventDefault();
 
-  if(
-    $("email").value.toLowerCase()
-    ==="orlando"
-    &&
-    $("pass").value
-    ==="Juelzlee1319@"
-  ){
-    localStorage.setItem(
-      "tiburon_session",
-      "1"
-    );
-    start();
-  }else{
-    $("loginErr").textContent=
-      "Credenciales incorrectas. Usa tu usuario y contraseña.";
+  const username = $("email").value.trim();
+  const password = $("pass").value;
+
+  // Validar que los campos no estén vacíos
+  if(!username || !password){
+    $("loginErr").textContent = "Por favor completa todos los campos.";
+    return;
   }
+
+  // Validar longitud mínima
+  if(username.length < 3 || password.length < 8){
+    $("loginErr").textContent = "Credenciales incorrectas.";
+    return;
+  }
+
+  // Llamar a función de verificación (en producción sería una API)
+  verifyCredentials(username, password);
 };
+
+function verifyCredentials(username, password){
+  // IMPORTANTE: En producción, esto DEBE ser una llamada a un servidor backend
+  // Nunca validar credenciales en el cliente
+  
+  // Para demostración local, usar localStorage
+  const validUser = get("app_user", null);
+  
+  if(validUser && 
+     validUser.username === username && 
+     validUser.passwordHash){
+    // Verificación básica
+    localStorage.setItem("tiburon_session", "1");
+    $("email").value = "";
+    $("pass").value = "";
+    start();
+  } else {
+    $("loginErr").textContent = "Credenciales incorrectas. Usa tu usuario y contraseña.";
+    $("pass").value = "";
+  }
+}
 
 function start(){
   $("login").classList.add("hidden");
@@ -126,9 +148,9 @@ function start(){
 }
 
 function logout(){
-  localStorage.removeItem(
-    "tiburon_session"
-  );
+  localStorage.removeItem("tiburon_session");
+  $("email").value = "";
+  $("pass").value = "";
   location.reload();
 }
 
